@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Kodanalys
 {
     class Program
     {
-        static string[] users = new string[10];
-        static int userCount = 0;
+        static List<string> Users = new();
 
         static void Main(string[] args)
         {
@@ -52,25 +52,22 @@ namespace Kodanalys
 
         static void AddUser()
         {
-            Console.Write("Ange namn: ");
-            string userName = Console.ReadLine();
-            if (userCount < users.Length)
-            {
-                users[userCount] = userName;
-                userCount++;
-            }
-            else
+            if (Users.Count >= 10)
             {
                 Console.WriteLine("Listan är full!");
+                return;
             }
+            Console.Write("Ange namn: ");
+            string userName = Console.ReadLine();
+            Users.Add(userName);
         }
 
         static void ShowUsers()
         {
             Console.WriteLine("Användare:");
-            for (int i = 0; i < userCount; i++)
+            foreach (var user in Users)
             {
-                Console.WriteLine(users[i]);
+                Console.WriteLine(user);
             }
         }
 
@@ -78,17 +75,7 @@ namespace Kodanalys
         {
             Console.Write("Ange namn att ta bort: ");
             string nameToRemove = Console.ReadLine();
-            int removeIndex = FindUserIndex(nameToRemove);
-
-            if (removeIndex != -1)
-            {
-                for (int i = removeIndex; i < userCount - 1; i++)
-                {
-                    users[i] = users[i + 1];
-                }
-                userCount--;
-            }
-            else
+            if (!Users.Remove(nameToRemove))
             {
                 Console.WriteLine("Användaren hittades inte.");
             }
@@ -98,9 +85,7 @@ namespace Kodanalys
         {
             Console.Write("Ange namn att söka: ");
             string nameToSearch = Console.ReadLine();
-            int foundIndex = FindUserIndex(nameToSearch);
-
-            if (foundIndex != -1)
+            if (Users.Contains(nameToSearch))
             {
                 Console.WriteLine("Användaren finns i listan.");
             }
@@ -108,18 +93,6 @@ namespace Kodanalys
             {
                 Console.WriteLine("Användaren hittades inte.");
             }
-        }
-
-        static int FindUserIndex(string userName)
-        {
-            for (int i = 0; i < userCount; i++)
-            {
-                if (users[i] == userName)
-                {
-                    return i;
-                }
-            }
-            return -1;
         }
     }
 }
